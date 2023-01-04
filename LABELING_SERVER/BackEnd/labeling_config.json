@@ -1,0 +1,7 @@
+{
+	"crop_folder":"C:\\LABELING_SERVER\\backend\\crop_data",
+	"import_base64_folder":"C:\\LABELING_SERVER\\backend\\import",
+	"import_json_folder":"C:\\LABELING_SERVER\\backend\\import_json",
+	"export_approval_folder":"C:\\LABELING_SERVER\\backend\\export"
+		
+}

@@ -1,0 +1,6 @@
+[mysqld]
+datadir=C:/LABELING_SERVER/MariaDB/data
+port=5507
+[client]
+port=5507
+plugin-dir=C:/LABELING_SERVER/MariaDB/lib/plugin
