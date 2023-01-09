@@ -7,22 +7,22 @@ namespace SAP2D {
     [AddComponentMenu("Pathfinding 2D/SAP2D Agent")]
     public class SAP2DAgent : MonoBehaviour
     {
-        public SAP2DPathfindingConfig Config;
-        public bool MouseControl;
-        public Transform Target;
+        public SAP2DPathfindingConfig Config;       //??
+        public bool MouseControl;                   // mousecontrol 킬건지
+        public Transform Target;                    // 목적지
 
         [Space(10)]
-        public bool CanMove = true;
+        public bool CanMove = true;                 // 움직일지 움직이지 않을지
         [Range(0, 1000)]
-        public float MovementSpeed = 5;
+        public float MovementSpeed = 5;             // 움직이는 속도
         [Range(0, 1000)]
-        public float RotationSpeed = 500;
+        public float RotationSpeed = 500;           // 회전하는 속도
 
 
         [HideInInspector]
-        public bool isMoving;
+        public bool isMoving;                       //  움직일지 움직이지 않을지
         [HideInInspector]
-        public int pathIndex; //current tile index
+        public int pathIndex; //current tile index  // tile index??
         [HideInInspector]
         public Vector3 posInGrid;
 

@@ -111,12 +111,12 @@ namespace SAP2D {
                 CalculateColliders();
                 ReadUserData();
             }
-            int x = Mathf.FloorToInt((worldPosition.x - MinPos.x) / tileDiameter);
-            int y = Mathf.FloorToInt((worldPosition.y - MinPos.y) / tileDiameter);
+            int x = Mathf.FloorToInt((worldPosition.x - MinPos.x) / tileDiameter);      // 10.0 => 10 // 10.2 => 11  
+            int y = Mathf.FloorToInt((worldPosition.y - MinPos.y) / tileDiameter);      // -10.0 => 10 // -10.2 => -11
 
-            x = Mathf.Clamp(x, 0, width - 1);
-            y = Mathf.Clamp(y, 0, height - 1);
-
+            x = Mathf.Clamp(x, 0, width - 1);           // 유효한 범위 이내인지 체크 0 ~ width -1 까지의 범위인지를 체크하고
+            y = Mathf.Clamp(y, 0, height - 1);          // 지정된 범위 이내라면 x(value) 반환 하고  (a1,a2,a3) 중 a2~a3 인데 작은쪽으로 벗어난 경우 a2 반환 
+                                                        // 큰쪽으로 벗어난 경우라면 a3 반환
             return tiles[x, y];
         }
 
