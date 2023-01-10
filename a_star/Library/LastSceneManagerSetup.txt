@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/SAP2D/Resources/Demos/Demo_Dynamic_Obstacles/Demo 1.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
