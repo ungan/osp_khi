@@ -2,7 +2,7 @@
 
 namespace Assets.Source.GizmosUtils
 {
-    public static class GizmosUtils
+    public static class GizmosUtils             // 숫자 그려주는 코드
     {
         public static void DrawText(GUISkin guiSkin, string text, Vector3 position, Color? color = null, int fontSize = 0, float yOffset = 0)
         {
@@ -32,5 +32,6 @@ namespace Assets.Source.GizmosUtils
             GUI.skin = prevSkin;
 #endif
         }
+        
     }
 }

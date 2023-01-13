@@ -15,7 +15,7 @@ namespace Assets.Source.Components.Pathfinder
         private LayerMask clickableLayers;
 
         [SerializeField]
-        private bool canMoveDiagonally = false;
+        private bool canMoveDiagonally = true;
         
         private NavigationMeshComponent navigationMesh;
         private AStarPathMapper pathMapper;
@@ -35,7 +35,7 @@ namespace Assets.Source.Components.Pathfinder
 
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))                                                            // 마우스 클릭 위치 받아오고 그 클릭한 위치를 destination으로 설정
             {
                 Vector3 mouse = Input.mousePosition;
                 Ray castPoint = Camera.main.ScreenPointToRay(mouse);
@@ -46,16 +46,16 @@ namespace Assets.Source.Components.Pathfinder
             }
 
             // Try moving solids around and checking out how the path updates
-            lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);
+            lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
         }
 
-        private void OnDrawGizmos()
+        private void OnDrawGizmos()                                                                     // 가야하는길에 노란색 원 그려줌
         {
             Gizmos.color = Color.yellow;
 
             if (lastMappedPath != null && lastMappedPath.Any()) 
             {
-                foreach (Node node in lastMappedPath) 
+                foreach (Node node in lastMappedPath)                                                   // 아마 처음부터 끝까지의 노드를 불러오는 반복문
                 {
                     Gizmos.DrawWireSphere(node.Center, 0.2f);            
                 }          
