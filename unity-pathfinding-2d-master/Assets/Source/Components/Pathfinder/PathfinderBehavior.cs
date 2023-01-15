@@ -24,6 +24,8 @@ namespace Assets.Source.Components.Pathfinder
 
         private Vector3 destination;
 
+        private int movecell_count = 0;
+
         private void Awake()
         {
             destination = new Vector3(0f, 0f, 0f);
@@ -47,6 +49,7 @@ namespace Assets.Source.Components.Pathfinder
 
             // Try moving solids around and checking out how the path updates
             lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
+            move();
         }
 
         private void OnDrawGizmos()                                                                     // 가야하는길에 노란색 원 그려줌
@@ -62,6 +65,32 @@ namespace Assets.Source.Components.Pathfinder
             }
         }
 
+        private void move()
+        {
+            if(Mathf.Round(transform.position.x) != Mathf.Round(destination.x) && Mathf.Round(transform.position.y) != Mathf.Round(destination.y) && Mathf.Round(transform.position.z) != Mathf.Round(destination.z))
+            {
+                if (lastMappedPath != null && lastMappedPath.Any())
+                {
+                    Node node2 = lastMappedPath[0];
+
+                    while (true)
+                    {
+                        if (movecell_count == lastMappedPath.Count + 1) break;  // 다 움직였을경우 멈추게?
+
+                        node2 = lastMappedPath[movecell_count];
+                        
+                        transform.position = Vector3.MoveTowards(transform.position, node2.Center, 1);
+
+                        if (Mathf.Round(transform.position.x) == Mathf.Round(node2.Center.x) && Mathf.Round(transform.position.y) == Mathf.Round(node2.Center.y))
+                        {
+
+                        }
+                    }
+
+                }
+            }
+
+        }
 
     }
 }

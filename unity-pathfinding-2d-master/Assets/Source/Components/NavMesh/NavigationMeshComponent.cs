@@ -6,23 +6,23 @@ namespace Assets.Source.Components.NavMesh
 {
     public class NavigationMeshComponent : MonoBehaviour
     {
-        [Tooltip("How many tiles going horizontally")]
+        [Tooltip("How many tiles going horizontally")]          // 가로로 가는 타일 수
         [SerializeField]
         private int gridWidth = 20;
         public int GridWidth => gridWidth;
 
-        [Tooltip("How many tiles going vertically")]
+        [Tooltip("How many tiles going vertically")]            // 수직으로 가는 타일 수
         [SerializeField]
         private int gridHeight = 15;
         public int GridHeight => gridHeight;
 
 
-        [Tooltip("The size of each tile in units.  Should be large enough for a pathfinder to pass through without clipping the edge of corners.")]
+        [Tooltip("The size of each tile in units.  Should be large enough for a pathfinder to pass through without clipping the edge of corners.")]             // 각 타일의 크기(단위)입니다. 길잡이가 모서리를 자르지 않고 통과할 수 있을 만큼 충분히 커야 합니다.
         [SerializeField]
         private float tileSize = 0.5f;
 
-        [Tooltip("Recalculates the entire navigation mesh every frame.  Leave this on if things in your level move around, " +
-            "or set to false if the level is static for a performance boost.")]
+        [Tooltip("Recalculates the entire navigation mesh every frame.  Leave this on if things in your level move around, " +                                  // 매 프레임마다 전체 내비게이션 메시를 다시 계산합니다. 레벨의 사물이 움직이면 이 설정을 켜두세요.
+            "or set to false if the level is static for a performance boost.")]                                                                                 // 또는 성능 향상을 위해 레벨이 정적이면 false로 설정하십시오.
         [SerializeField]
         private bool syncEveryFrame = true;
 
@@ -37,10 +37,10 @@ namespace Assets.Source.Components.NavMesh
         // Generate the initial nav mesh        // 초기 탐색 메시 생성
         private void GenerateNavigationMesh()
         {
-            for (var ix = 0; ix < gridWidth; ix++)
+            for (var ix = 0; ix < gridWidth; ix++)          //
             {
                 nodes[ix] = new Node[gridHeight];
-                for (var iy = 0; iy < gridHeight; iy++)
+                for (var iy = 0; iy < gridHeight; iy++)         //
                 {
                     var center = new Vector2(x: (ix  * tileSize) + transform.position.x, y: (iy * tileSize) + transform.position.y);
                     var isSolid = TileContainsSolid(center);

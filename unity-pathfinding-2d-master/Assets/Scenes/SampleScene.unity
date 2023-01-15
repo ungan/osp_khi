@@ -155,7 +155,7 @@ MonoBehaviour:
   clickableLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  canMoveDiagonally: 0
+  canMoveDiagonally: 1
 --- !u!4 &178417583
 Transform:
   m_ObjectHideFlags: 0
