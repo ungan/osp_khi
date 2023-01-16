@@ -23,9 +23,9 @@ namespace Assets.Source.Components.Pathfinder
         private List<Node> lastMappedPath;
 
         private Vector3 destination;
-
+        private Vector3 c_destination;
         private int movecell_count = 0;
-
+        private float speed = 1f;
         private void Awake()
         {
             destination = new Vector3(0f, 0f, 0f);
@@ -42,14 +42,26 @@ namespace Assets.Source.Components.Pathfinder
                 Vector3 mouse = Input.mousePosition;
                 Ray castPoint = Camera.main.ScreenPointToRay(mouse);
 
-                destination = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                c_destination = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
                 
             }
 
-            // Try moving solids around and checking out how the path updates
-            lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
+            if(Mathf.Round(c_destination.x) != Mathf.Round(destination.x) || Mathf.Round(c_destination.y) != Mathf.Round(destination.y) || Mathf.Round(c_destination.z) != Mathf.Round(destination.z))
+            {
+                movecell_count = 0;
+                destination = c_destination;
+                lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
+            }
             move();
+            // Try moving solids around and checking out how the path updates
+
+
+        }
+
+        private void FixedUpdate()
+        {
+            
         }
 
         private void OnDrawGizmos()                                                                     // 가야하는길에 노란색 원 그려줌
@@ -67,24 +79,24 @@ namespace Assets.Source.Components.Pathfinder
 
         private void move()
         {
-            if(Mathf.Round(transform.position.x) != Mathf.Round(destination.x) && Mathf.Round(transform.position.y) != Mathf.Round(destination.y) && Mathf.Round(transform.position.z) != Mathf.Round(destination.z))
+            if(Mathf.Round(transform.position.x) != Mathf.Round(destination.x) || Mathf.Round(transform.position.y) != Mathf.Round(destination.y) || Mathf.Round(transform.position.z) != Mathf.Round(destination.z))
             {
                 if (lastMappedPath != null && lastMappedPath.Any())
                 {
-                    Node node2 = lastMappedPath[0];
+                    Node node2;
 
-                    while (true)
-                    {
-                        if (movecell_count == lastMappedPath.Count + 1) break;  // 다 움직였을경우 멈추게?
+                    if (movecell_count == 0) node2 = lastMappedPath[0];
 
-                        node2 = lastMappedPath[movecell_count];
+                    //if (movecell_count == lastMappedPath.Count) break;  // 다 움직였을경우 멈추게?
+
+
+                    node2 = lastMappedPath[movecell_count];
                         
-                        transform.position = Vector3.MoveTowards(transform.position, node2.Center, 1);
+                    transform.position = Vector3.MoveTowards(transform.position, node2.Center, speed * Time.deltaTime);
 
-                        if (Mathf.Round(transform.position.x) == Mathf.Round(node2.Center.x) && Mathf.Round(transform.position.y) == Mathf.Round(node2.Center.y))
-                        {
-
-                        }
+                    if (Mathf.Round(transform.position.x) == Mathf.Round(node2.Center.x) && Mathf.Round(transform.position.y) == Mathf.Round(node2.Center.y))
+                    {
+                        if (movecell_count < lastMappedPath.Count-1) movecell_count++;
                     }
 
                 }
