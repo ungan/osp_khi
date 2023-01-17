@@ -8,6 +8,7 @@ namespace Assets.Source.Components.Pathfinder
 {
     public class PathfinderBehavior : MonoBehaviour
     {
+
         [SerializeField]
         private GameObject navigationMeshObject;
 
@@ -22,21 +23,33 @@ namespace Assets.Source.Components.Pathfinder
 
         private List<Node> lastMappedPath;
 
+        private GameObject target_obj;
         private Vector3 destination;
         private Vector3 c_destination;
+
         private int movecell_count = 0;
         private float speed = 1f;
+
+        private bool moving = false;
+
         private void Awake()
         {
-            destination = new Vector3(0f, 0f, 0f);
+            //partyManager = GameObject.Find("Party").GetComponent<PartyManager>();  //파티(플레이어)찾기 SJM
+
+            target_obj = GameObject.Find("target_obj");
+            destination = new Vector3(target_obj.transform.position.x, target_obj.transform.position.y, target_obj.transform.position.z);
             navigationMesh = navigationMeshObject?.GetComponent<NavigationMeshComponent>()
                 ?? throw new UnityException("Navigation mesh is missing required Navigation Mesh Component");
 
             pathMapper = new AStarPathMapper(navigationMesh);
+
+            //lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
         }
 
         private void Update()
         {
+            c_destination = new Vector3(target_obj.transform.position.x, target_obj.transform.position.y, target_obj.transform.position.z);
+            /*
             if (Input.GetMouseButtonDown(0))                                                            // 마우스 클릭 위치 받아오고 그 클릭한 위치를 destination으로 설정
             {
                 Vector3 mouse = Input.mousePosition;
@@ -45,17 +58,16 @@ namespace Assets.Source.Components.Pathfinder
                 c_destination = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
                 
-            }
+            }*/
 
-            if(Mathf.Round(c_destination.x) != Mathf.Round(destination.x) || Mathf.Round(c_destination.y) != Mathf.Round(destination.y) || Mathf.Round(c_destination.z) != Mathf.Round(destination.z))
+            if(Mathf.Round(c_destination.x) != Mathf.Round(destination.x) || Mathf.Round(c_destination.y) != Mathf.Round(destination.y) || Mathf.Round(c_destination.z) != Mathf.Round(destination.z) || moving == false)
             {
                 movecell_count = 0;
                 destination = c_destination;
-                lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
             }
+            lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
             move();
             // Try moving solids around and checking out how the path updates
-
 
         }
 
@@ -79,8 +91,9 @@ namespace Assets.Source.Components.Pathfinder
 
         private void move()
         {
-            if(Mathf.Round(transform.position.x) != Mathf.Round(destination.x) || Mathf.Round(transform.position.y) != Mathf.Round(destination.y) || Mathf.Round(transform.position.z) != Mathf.Round(destination.z))
+            if (Mathf.Round(transform.position.x) != Mathf.Round(destination.x) || Mathf.Round(transform.position.y) != Mathf.Round(destination.y) || Mathf.Round(transform.position.z) != Mathf.Round(destination.z))
             {
+                moving = true;
                 if (lastMappedPath != null && lastMappedPath.Any())
                 {
                     Node node2;
@@ -101,7 +114,10 @@ namespace Assets.Source.Components.Pathfinder
 
                 }
             }
-
+            else
+            {
+                moving = false;
+            }
         }
 
     }
