@@ -35,6 +35,10 @@ namespace Assets.Source.AStar
             // For the target node, if the destination is a solid node, find the nearest non-solid neighbor node instead    //대상 노드의 경우 대상이 솔리드 노드인 경우 대신 가장 가까운 솔리드가 아닌 이웃 노드를 찾습니다 ???
             var targetNode = FindNearestOpenNode(nodes[targetNodePosition.ix][targetNodePosition.iy], startNode);
 
+            //navigationMesh.UpdateTiles(new Vector3(startNodePosition.ix, startNodePosition.iy, 0));
+
+            //startNode.IsSolid = false;
+            //Debug.Log("startNode.IsSolid : " + startNode.IsSolid);
             // The "open list" is the list of nodes that we need to visit
             var openList = new List<Node>() { startNode };                                                              // 방문 해야 하는 노드
 

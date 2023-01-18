@@ -1,5 +1,6 @@
 ﻿using Assets.Source.AStar;
 using Assets.Source.Components.NavMesh;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,10 +32,36 @@ namespace Assets.Source.Components.Pathfinder
         private float speed = 1f;
 
         private bool moving = false;
+        private bool stop = true;
+        private bool ispathfinder = false;
 
+        private PathfinderBehavior pfib;
+
+        
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            if(collision.gameObject.tag == "pfi")
+            {
+                pfib = collision.gameObject.GetComponent<PathfinderBehavior>();
+                if(pfib.lastMappedPath.Count < lastMappedPath.Count)
+                {
+                    stop = true;
+                }
+            }
+        }
+
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.gameObject.tag == "pfi")
+            {
+                if (pfib.lastMappedPath.Count < lastMappedPath.Count)
+                {
+                    stop = false;
+                }
+            }
+        }
         private void Awake()
         {
-            //partyManager = GameObject.Find("Party").GetComponent<PartyManager>();  //파티(플레이어)찾기 SJM
 
             target_obj = GameObject.Find("target_obj");
             destination = new Vector3(target_obj.transform.position.x, target_obj.transform.position.y, target_obj.transform.position.z);
@@ -57,20 +84,25 @@ namespace Assets.Source.Components.Pathfinder
 
                 c_destination = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-                
             }*/
 
             if(Mathf.Round(c_destination.x) != Mathf.Round(destination.x) || Mathf.Round(c_destination.y) != Mathf.Round(destination.y) || Mathf.Round(c_destination.z) != Mathf.Round(destination.z) || moving == false)
             {
-                movecell_count = 0;
-                destination = c_destination;
             }
-            lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???
-            move();
-            // Try moving solids around and checking out how the path updates
+            
+            StartCoroutine("pathfinder");
+
+            
+            //Debug.Log("lastMappedPath.Count" + lastMappedPath.Count);
+            if(stop) move();
+            //movecell_count = 0;                                                                         // 최적화 안된경우 최적화 안된경우에 사용할것
+            //destination = c_destination;
+            //lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???          // 작은거 쓸때는 안에 넣을것 큰거는 밖에?
+            // Try moving solids around and checking out how the path updates                           // 솔리드를 이동하고 경로가 어떻게 업데이트되는지 확인하십시오.
 
         }
 
+        
         private void FixedUpdate()
         {
             
@@ -102,7 +134,7 @@ namespace Assets.Source.Components.Pathfinder
 
                     //if (movecell_count == lastMappedPath.Count) break;  // 다 움직였을경우 멈추게?
 
-
+                    //Debug.Log("lastMappedPath " + lastMappedPath[movecell_count]);
                     node2 = lastMappedPath[movecell_count];
                         
                     transform.position = Vector3.MoveTowards(transform.position, node2.Center, speed * Time.deltaTime);
@@ -119,6 +151,23 @@ namespace Assets.Source.Components.Pathfinder
                 moving = false;
             }
         }
+        private IEnumerator pathfinder()       
+        {
+            
+            if (ispathfinder == true) yield break;
+
+            ispathfinder = true;
+            movecell_count = 0;                                                                         // 최적화? 속도를 올리고 싶은경우에 사용할것
+            destination = c_destination;
+            lastMappedPath = pathMapper.FindPath(transform.position, destination, canMoveDiagonally);   // 출발지 목적지 ???          // 작은거 쓸때는 안에 넣을것 큰거는 밖에?
+            yield return new WaitForSeconds(0.2f);
+
+            ispathfinder = false;
+            
+            yield return null;
+        }
 
     }
+
+
 }

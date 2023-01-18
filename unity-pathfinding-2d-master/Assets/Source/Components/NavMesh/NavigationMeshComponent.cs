@@ -59,7 +59,7 @@ namespace Assets.Source.Components.NavMesh
         {
             if (syncEveryFrame)
             {
-                UpdateTiles();
+                //UpdateTiles();
             }
         }
 
@@ -71,15 +71,18 @@ namespace Assets.Source.Components.NavMesh
 
 
         // For each tile, update its "isSolid" status.                              // 각 타일에 대해 "isSolid" 상태를 업데이트합니다.
-        private void UpdateTiles() 
+        public void UpdateTiles(Vector3 obj) 
         {
             if (nodes != null)
-            {
+            {   
                 foreach (var nodeRow in nodes)
                 {
                     foreach (var node in nodeRow)
                     {
-                        node.IsSolid = TileContainsSolid(node.Center);
+                        if (node.XIndex != obj.x && node.YIndex != obj.y)
+                        {
+                            node.IsSolid = TileContainsSolid(node.Center);
+                        }
                     }
                 }
             }
